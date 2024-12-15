@@ -1,0 +1,20 @@
+logging:
+    config: classpath:logback.xml
+
+xxl:
+    job:
+        accessToken: ''
+        admin:
+            addresses: http://159.75.185.120:8093/xxl-job-admin
+        executor:
+            address: http://genji.nat100.top
+            appname: stock-executor
+            ip: ''
+            logpath: ./log
+            logretentiondays: 30
+            port: 9999
+
+
+#股票采集cron表达式
+#前半小时: 0 0-29 10,11,13,14 ? * 2-6 *
+#后半小时: 0 30-59 9,10,13,14 ? * 2-6 *

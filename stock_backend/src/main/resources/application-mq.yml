@@ -1,0 +1,7 @@
+spring:
+  rabbitmq:
+    host: 159.75.185.120 # rabbitMQ的ip地址
+    port: 5672 # 端口
+    username: root
+    password: Fk34y8Wp21Gh96
+    virtual-host: /
