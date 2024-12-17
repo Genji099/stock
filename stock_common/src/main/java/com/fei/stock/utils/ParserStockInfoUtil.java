@@ -138,6 +138,7 @@ public class ParserStockInfoUtil {
                 .updown(upDown)
                 .rose(rose)
                 .curTime(now)
+                .marketName(marketName)
                 .build();
         return smi;
     }

@@ -1,8 +1,6 @@
 package com.fei.stock.mapper;
 
-import com.fei.stock.pojo.domain.Stock4EvrDayDomain;
-import com.fei.stock.pojo.domain.Stock4MinuteDomain;
-import com.fei.stock.pojo.domain.StockUpdownDomain;
+import com.fei.stock.pojo.domain.*;
 import com.fei.stock.pojo.entity.StockRtInfo;
 import org.apache.ibatis.annotations.Param;
 
@@ -99,4 +97,30 @@ public interface StockRtInfoMapper {
      * @return
      */
     int insertByList(@Param("list") List<StockRtInfo> stockRtList);
+
+    /**
+     * 获取周k线
+     * @param startDate
+     * @param endDate
+     * @param code
+     * @return
+     */
+    List<WeekLineDomain> getWeekLineInfo(@Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("code") String code);
+
+    /**
+     * 获取个股最新分时行情数据，主要包含：
+     * 	开盘价、前收盘价、最新价、最高价、最低价、成交金额和成交量、交易时间信息;
+     * @param endTime 结束时间
+     * @param code 股票代码
+     * @return
+     */
+    StockTimeSharingDomain getStockTimeSharingInfo(@Param("endTime") Date endTime, @Param("code") String code);
+
+    /**
+     * 个股交易流水行情数据查询--查询最新交易流水，按照交易时间降序取前10
+     * @param endDate 最新时间
+     * @param code
+     * @return
+     */
+    List<StockBillDomain> getStockBillInfo(@Param("endDate") Date endDate, @Param("code") String code);
 }

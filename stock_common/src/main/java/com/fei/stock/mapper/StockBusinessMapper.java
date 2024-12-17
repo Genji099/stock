@@ -1,8 +1,11 @@
 package com.fei.stock.mapper;
 
+import com.fei.stock.pojo.domain.StockBusinessInfo;
 import com.fei.stock.pojo.entity.StockBusiness;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author 59747
@@ -30,4 +33,17 @@ public interface StockBusinessMapper {
      */
     List<String> getAllSockCode();
 
+    /**
+     * 根据股票部分代码进行模糊查询
+     * @param searchStr
+     * @return
+     */
+    List<Map> searchByCode(@Param("searchStr") String searchStr);
+
+    /**
+     * 个股主营业务查询接口
+     * @param code
+     * @return
+     */
+    StockBusinessInfo getStockBusinessInfo(@Param("code") String code);
 }

@@ -27,6 +27,19 @@
     <select id="getAllSockCode" resultType="java.lang.String">
     select stock_code from stock_business
     </select>
+    <!--模糊查找股票代码    -->
+    <select id="searchByCode" resultType="java.util.Map">
+        select stock_code,stock_name
+        from stock_business
+        where stock_code like CONCAT('%', #{searchStr}, '%');
+    </select>
+    <select id="getStockBusinessInfo" resultType="com.fei.stock.pojo.domain.StockBusinessInfo">
+        select stock_code as code, stock_name as name,
+               block_name as trade,
+               business as business
+        from stock_business
+        where stock_business.stock_code = #{code};
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_business

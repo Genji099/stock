@@ -35,5 +35,41 @@ public interface StockService
 
     Rest<List<Stock4EvrDayDomain>> getStockDayKLin(String stockCode);
 
+    /**
+     * 模糊查找股票数据
+     * @param searchStr 股票代码,不可以是文字
+     * @return
+     */
+    Rest<List<Map>> searchStock(String searchStr);
+
+    /**
+     * 外盘指数行情数据查询，根据时间和大盘点数降序排序取前4
+     * @return
+     */
+    Rest<List<OuterMarketDomain>> getOuterMarketInfo();
+
+    /**
+     * 个股主营业务查询接口
+     * @param code
+     * @return
+     */
+    Rest<StockBusinessInfo> getStockBusinessInfo(String code);
+
+    /**
+     * 获取周k线接口
+     * @param code
+     * @return
+     */
+    Rest<List<WeekLineDomain>> getWeekLineInfo(String code);
+
+    Rest<StockTimeSharingDomain> getStockTimeSharingInfo(String code);
+
+    /**
+     * 个股交易流水行情数据查询--查询最新交易流水，按照交易时间降序取前10
+     * @param code
+     * @return
+     */
+    Rest<List<StockBillDomain>> getStockBillInfo(String code);
+
     //List<Date>getDayLineDateList();
 }

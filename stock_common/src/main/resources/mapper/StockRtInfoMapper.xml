@@ -176,6 +176,52 @@
         </foreach>
         order by sri2.cur_time;
     </select>
+    <select id="getWeekLineInfo" resultType="com.fei.stock.pojo.domain.WeekLineDomain">
+        SELECT stock_id as stockCode,
+               week_high as maxPrice,
+               week_low as minPrice,
+               week_open as openPrice,
+               week_close as closePrice,
+               week_avg as avgPrice,
+               week_max_trade_date as mxTime
+        FROM (SELECT stock_code                                                 AS stock_id,
+                     DATE_FORMAT(cur_time, '%Y-%u')                             AS year_week,
+                     MAX(cur_price)                                             AS week_high,
+                     MIN(cur_price)                                             AS week_low,
+                     AVG(cur_price)                                             AS week_avg,
+                     MAX(cur_time)                                              AS week_max_trade_date,
+                     COALESCE(MAX(CASE WHEN DAYOFWEEK(cur_time) = 2 THEN open_price END), 0) AS week_open,
+                     COALESCE(MAX(CASE WHEN DAYOFWEEK(cur_time) = 2 THEN pre_close_price END), 0 ) AS week_close
+              FROM stock_rt_info
+              WHERE stock_code = #{code}
+                and cur_time BETWEEN #{startDate} AND #{endDate}
+              GROUP BY stock_code, DATE_FORMAT(cur_time, '%Y-%u')) AS weekly_data
+        WHERE stock_id = #{code};
+    </select>
+    <select id="getStockTimeSharingInfo" resultType="com.fei.stock.pojo.domain.StockTimeSharingDomain">
+        select trade_amount as tradeAmt,
+               pre_close_price as preClosePrice,
+               min_price as lowPrice,
+               max_price as highPrice,
+               open_price as openPrice,
+               trade_volume as tradeVol,
+               cur_price as tradePrice,
+               date_format(cur_time,'%Y%m%d%H%i') as curDate
+
+        from stock_rt_info where stock_code = #{code}
+                             and cur_time = #{endTime}
+    </select>
+    <select id="getStockBillInfo" resultType="com.fei.stock.pojo.domain.StockBillDomain">
+        select cur_time as date,
+       trade_amount                        as tradeAmt,
+       trade_volume                        as tradeVol,
+       cur_price                           as tradePrice
+        from stock_rt_info
+        where DATE(cur_time) = #{endDate}
+          and stock_code = #{code}
+        order by cur_time desc
+            limit 10;
+    </select>
 
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">

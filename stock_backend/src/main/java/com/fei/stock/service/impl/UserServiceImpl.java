@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService
         String imageBase64 = lineCaptcha.getImageBase64();
         long l = idWorker.nextId();
         String sessionId = String.valueOf(l);
-        //保存数据到redis sessionid作为key 验证码作为value
+        //保存数据到redis sessionid作为key(雪花算法实现) 验证码内容作为value
         log.info("图片验证码: "+lineCaptchaCode+" 会话id: "+sessionId+" -----------------------------------" +
                 "图片校验码: "+imageBase64);
         redisTemplate.opsForValue().set(StockConstant.CHECK_PREFIX+sessionId,lineCaptchaCode,6, TimeUnit.MINUTES);

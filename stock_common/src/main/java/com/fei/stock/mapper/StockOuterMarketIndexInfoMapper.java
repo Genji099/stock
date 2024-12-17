@@ -1,6 +1,10 @@
 package com.fei.stock.mapper;
 
+import com.fei.stock.pojo.domain.OuterMarketDomain;
 import com.fei.stock.pojo.entity.StockOuterMarketIndexInfo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author 59747
@@ -22,4 +26,16 @@ public interface StockOuterMarketIndexInfoMapper {
 
     int updateByPrimaryKey(StockOuterMarketIndexInfo record);
 
+    /**
+     * 外盘指数行情数据查询，根据时间和大盘点数降序排序取前4
+     * @return
+     */
+    List<OuterMarketDomain> getOuterMarketInfo();
+
+    /**
+     * 采集外盘数据
+     * @param list
+     * @return
+     */
+    int insertOutMarketData(@Param("list")List<StockOuterMarketIndexInfo> list);
 }
