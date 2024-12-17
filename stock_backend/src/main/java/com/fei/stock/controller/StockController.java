@@ -152,4 +152,63 @@ public class StockController
         return stockService.getStockDayKLin(stockCode);
     }
 
+    /**
+     * 根据股票代码模糊查找股票
+     * @param searchStr
+     * @return
+     */
+    @GetMapping("/stock/search")
+    public Rest<List<Map>> searchStock(@RequestParam(value = "searchStr",required = true) String searchStr)
+    {
+        return stockService.searchStock(searchStr);
+    }
+
+    /**
+     * 外盘指数行情数据查询，根据时间和大盘点数降序排序取前4
+     * @return
+     */
+    @GetMapping("/external/index")
+    public Rest<List<OuterMarketDomain>> getOuterMarketInfo()
+    {
+        return  stockService.getOuterMarketInfo();
+    }
+
+    /**
+     * 获取公司业务信息
+     * @param code 股票代码
+     * @return
+     */
+    @GetMapping("/stock/describe")
+    public Rest<StockBusinessInfo> getStockBusinessInfo(@RequestParam(value = "code",required = true) String code)
+    {
+        return  stockService.getStockBusinessInfo(code);
+    }
+
+    /**
+     * 获取周k线
+     * @param code 股票代码
+     * @return
+     */
+    @GetMapping("/stock/screen/weekkline")
+    public Rest<List<WeekLineDomain>> getWeekLineInfo(@RequestParam(value = "code",required = true) String code)
+    {
+        return stockService.getWeekLineInfo(code);
+    }
+
+    /**
+     * 获取个股最新分时行情数据
+     * @param code 股票代码
+     * @return
+     */
+    @GetMapping("/stock/screen/second/detail")
+    public Rest<StockTimeSharingDomain> getStockTimeSharingInfo(@RequestParam(value = "code") String code)
+    {
+        return stockService.getStockTimeSharingInfo(code);
+    }
+
+    @GetMapping("/stock/screen/second")
+    public Rest<List<StockBillDomain>> getStockBillInfo(@RequestParam(value = "code") String code)
+    {
+        return stockService.getStockBillInfo(code);
+    }
 }

@@ -1,6 +1,7 @@
 package com.fei.stock;
 
 import com.fei.stock.mapper.StockBlockRtInfoMapper;
+import com.fei.stock.mapper.StockBusinessMapper;
 import com.fei.stock.mapper.StockRtInfoMapper;
 import com.fei.stock.pojo.domain.Stock4EvrDayDomain;
 import com.fei.stock.pojo.domain.StockBlockDomain;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 @SpringBootTest
@@ -27,6 +29,9 @@ public class MyBatisTest
     private StockBlockRtInfoMapper stockBlockRtInfoMapper;
     @Autowired
     private StockRtInfoMapper stockRtInfoMapper;
+
+    @Autowired
+    private StockBusinessMapper stockBusinessMapper;
     @Test
     public void getBlockInfoTest()
     {
@@ -75,6 +80,13 @@ public class MyBatisTest
         List<Date> dayLineDateList = stockRtInfoMapper.getDayLineDateList(startDate, endDate,"600021");
         List<Stock4EvrDayDomain>data=stockRtInfoMapper.getStockDayKLinByList(dayLineDateList,"600021");
         System.out.println("sdf");
+    }
+
+    @Test
+    public void fun6()
+    {
+        List<Map> maps = stockBusinessMapper.searchByCode("60");
+        System.out.println(maps);
     }
 
 }

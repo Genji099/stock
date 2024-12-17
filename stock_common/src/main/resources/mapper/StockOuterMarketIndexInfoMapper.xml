@@ -26,6 +26,12 @@
         from stock_outer_market_index_info
         where  id = #{id,jdbcType=BIGINT} 
     </select>
+    <select id="getOuterMarketInfo" resultType="com.fei.stock.pojo.domain.OuterMarketDomain">
+        SELECT id, market_code, market_name as name, cur_point, updown, rose, cur_time
+        FROM stock_outer_market_index_info
+        ORDER BY cur_time DESC, cur_point DESC
+            LIMIT 4;
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_outer_market_index_info
@@ -60,6 +66,18 @@
                 <if test="rose != null">#{rose,jdbcType=DECIMAL},</if>
                 <if test="curTime != null">#{curTime,jdbcType=TIMESTAMP},</if>
         </trim>
+    </insert>
+    <insert id="insertOutMarketData">
+        insert into stock_outer_market_index_info
+        ( id,market_code,market_name
+        ,cur_point,updown,rose
+        ,cur_time)
+        values
+        <foreach collection="list" item="data" separator=",">
+            (#{data.id,jdbcType=BIGINT},#{data.marketCode,jdbcType=CHAR},#{data.marketName,jdbcType=VARCHAR}
+            ,#{data.curPoint,jdbcType=DECIMAL},#{data.updown,jdbcType=DECIMAL},#{data.rose,jdbcType=DECIMAL}
+            ,#{data.curTime,jdbcType=TIMESTAMP})
+        </foreach>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.fei.stock.pojo.entity.StockOuterMarketIndexInfo">
         update stock_outer_market_index_info

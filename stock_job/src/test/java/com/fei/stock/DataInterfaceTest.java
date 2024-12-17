@@ -27,4 +27,10 @@ public class DataInterfaceTest
     {
         stockTimerTaskService.getStockBlockInfo();
     }
+    @Test
+    public void fun4()
+    {
+        stockTimerTaskService.getOutMarketInfo();
+    }
+
 }

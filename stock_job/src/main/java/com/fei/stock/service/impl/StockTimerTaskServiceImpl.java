@@ -1,12 +1,10 @@
 package com.fei.stock.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.fei.stock.mapper.StockBlockRtInfoMapper;
-import com.fei.stock.mapper.StockBusinessMapper;
-import com.fei.stock.mapper.StockMarketIndexInfoMapper;
-import com.fei.stock.mapper.StockRtInfoMapper;
+import com.fei.stock.mapper.*;
 import com.fei.stock.pojo.entity.StockBlockRtInfo;
 import com.fei.stock.pojo.entity.StockMarketIndexInfo;
+import com.fei.stock.pojo.entity.StockOuterMarketIndexInfo;
 import com.fei.stock.pojo.entity.StockRtInfo;
 import com.fei.stock.pojo.vo.StockInfoConfig;
 import com.fei.stock.service.StockTimerTaskService;
@@ -58,6 +56,8 @@ public class StockTimerTaskServiceImpl implements StockTimerTaskService
     private ParserStockInfoUtil parserStockInfoUtil;
     @Autowired
     private StockRtInfoMapper stockRtInfoMapper;
+    @Autowired
+    private StockOuterMarketIndexInfoMapper stockOuterMarketIndexInfoMapper;
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
@@ -250,7 +250,32 @@ public class StockTimerTaskServiceImpl implements StockTimerTaskService
             log.error("{}: 插入数据失败:{}", DateTime.now().toString("yyyy-MM-dd: HH:mm:ss"), stockBlockRtInfos);
         }
 
+    }
 
+    /**
+     * 采集外盘
+     */
+    @Override
+    public void getOutMarketInfo()
+    {
+        String url =  stockInfoConfig.getMarketUrl()+ String.join("," , stockInfoConfig.getOuter());
+        ResponseEntity<String> exchange = restTemplate.exchange(url, HttpMethod.GET, httpEntity, String.class);
+        int statusCodeValue = exchange.getStatusCodeValue();
+        if (statusCodeValue != 200) {
+            log.error("当前时间点{} , 数据采集失败 , 状态码{}", DateTime.now().toString("yyyy-MM-dd HH-mm-ss"), statusCodeValue);
+            return;
+        }
+        String jsData = exchange.getBody();
+        List<StockOuterMarketIndexInfo> list = parserStockInfoUtil.parser4StockOrMarketInfo(jsData, ParseType.OUTER);
+        log.info("采集的当前大盘数据：{}", list);
+
+        int num = stockOuterMarketIndexInfoMapper.insertOutMarketData(list);
+        if (num > 0) {
+            log.info("当前时间点{} , 数据插入成功", DateTime.now().toString("yyyy-MM-dd HH-mm-ss"));
+            rabbitTemplate.convertAndSend("stockExchange","inner.market",new Date());
+        } else {
+            log.error("当前时间点{} , 数据插入失败", DateTime.now().toString("yyyy-MM-dd HH-mm-ss"));
+        }
     }
 
 

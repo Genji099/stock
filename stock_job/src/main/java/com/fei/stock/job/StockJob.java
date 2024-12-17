@@ -45,5 +45,10 @@ public class StockJob
     public void getStockBlockInfo() throws Exception {
         stockTimerTaskService.getStockBlockInfo();
     }
+    @XxlJob("getOutMarketInfo")
+    public void getOutMarketInfo() throws Exception {
+        stockTimerTaskService.getOutMarketInfo();
+    }
+
 
 }

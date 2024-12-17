@@ -18,4 +18,10 @@ public interface StockTimerTaskService {
      * 获取板块数据
      */
      void getStockBlockInfo();
+
+    /**
+     * 采集外盘数据
+     *
+     */
+    void getOutMarketInfo();
 } 
